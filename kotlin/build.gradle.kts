@@ -42,7 +42,6 @@ publishing {
 }
 
 spotless {
-    isEnforceCheck = false // TODO: Remove once code has been migrated to proper kotlin
     kotlin {
         ktlint()
     }
@@ -72,7 +71,6 @@ tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
     gradleVersion = "5.6.2"
 }
-
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
