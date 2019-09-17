@@ -75,7 +75,7 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
             out.println()
             return
         }
-        projectTasks.add(Task(nextId(), description, false))
+        projectTasks.add(Task(nextId(), description))
     }
 
     private fun check(idString: String) {
