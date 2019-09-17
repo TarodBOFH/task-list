@@ -43,13 +43,13 @@ public final class ApplicationTest {
 
     @AfterEach
     public void
-    kill_the_application() throws IOException, InterruptedException {
-        if (!stillRunning()) {
+    kill_the_application() throws InterruptedException {
+        if (hasBeenShutdown()) {
             return;
         }
 
         Thread.sleep(1000);
-        if (!stillRunning()) {
+        if (hasBeenShutdown()) {
             return;
         }
 
@@ -193,6 +193,7 @@ public final class ApplicationTest {
     private void read(String expectedOutput) throws IOException {
         int length = expectedOutput.length();
         char[] buffer = new char[length];
+        //noinspection ResultOfMethodCallIgnored
         outReader.read(buffer, 0, length);
         assertThat(String.valueOf(buffer)).isEqualTo(expectedOutput);
     }
@@ -207,7 +208,7 @@ public final class ApplicationTest {
         inWriter.println(input);
     }
 
-    private boolean stillRunning() {
-        return applicationThread != null && applicationThread.isAlive();
+    private boolean hasBeenShutdown() {
+        return applicationThread == null || !applicationThread.isAlive();
     }
 }
