@@ -4,11 +4,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.util.*
 
 class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) : Runnable {
 
-    private val tasks = LinkedHashMap<String, MutableList<Task>>()
+    private val tasks = mutableMapOf<String, MutableList<Task>>()
 
     private var lastId: Long = 0
 
@@ -16,9 +15,8 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
         while (true) {
             out.print("> ")
             out.flush()
-            val command: String
-            try {
-                command = `in`.readLine()
+            val command = try {
+                `in`.readLine()
             } catch (e: IOException) {
                 throw RuntimeException(e)
             }
@@ -44,10 +42,10 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
     }
 
     private fun show() {
-        for ((key, value) in tasks) {
-            out.println(key)
-            for (task in value) {
-                out.printf("    [%c] %d: %s%n", if (task.isDone) 'x' else ' ', task.id, task.description)
+        tasks.forEach {
+            out.println(it.key)
+            it.value.forEach { task ->
+                out.println("    [${when (task.isDone) { true -> 'x' else -> ' ' }}] ${task.id}: ${task.description}")
             }
             out.println()
         }
@@ -65,17 +63,12 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
     }
 
     private fun addProject(name: String) {
-        tasks[name] = ArrayList()
+        tasks[name] = mutableListOf()
     }
 
     private fun addTask(project: String, description: String) {
-        val projectTasks = tasks[project]
-        if (projectTasks == null) {
-            out.printf("Could not find a project with the name \"%s\".", project)
-            out.println()
-            return
-        }
-        projectTasks.add(Task(nextId(), description, false))
+        tasks[project]?.add(Task(nextId(), description))
+            ?: out.println("Could not find a project with the name \"${project}\".")
     }
 
     private fun check(idString: String) {
@@ -88,16 +81,8 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
 
     private fun setDone(idString: String, done: Boolean) {
         val id = Integer.parseInt(idString)
-        for ((_, value) in tasks) {
-            for (task in value) {
-                if (task.id == id.toLong()) {
-                    task.isDone = done
-                    return
-                }
-            }
-        }
-        out.printf("Could not find a task with an ID of %d.", id)
-        out.println()
+        tasks.values.flatten().find { it.id == id.toLong() }?.apply { isDone = done }
+            ?: out.println("Could not find a task with an ID of $id.")
     }
 
     private fun help() {
@@ -111,23 +96,16 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
     }
 
     private fun error(command: String) {
-        out.printf("I don't know what the command \"%s\" is.", command)
-        out.println()
+        out.println("I don't know what the command \"${command}\" is.")
     }
 
-    private fun nextId(): Long {
-        return ++lastId
-    }
+    private fun nextId(): Long = ++lastId
+}
 
-    companion object {
-        private val QUIT = "quit"
+private const val QUIT = "quit"
 
-        @Throws(Exception::class)
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val `in` = BufferedReader(InputStreamReader(System.`in`))
-            val out = PrintWriter(System.out)
-            TaskList(`in`, out).run()
-        }
-    }
+fun main() {
+    val `in` = BufferedReader(InputStreamReader(System.`in`))
+    val out = PrintWriter(System.out)
+    TaskList(`in`, out).run()
 }
