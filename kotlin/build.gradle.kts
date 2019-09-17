@@ -1,11 +1,11 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
     mavenCentral()
 }
 
+// see https://github.com/gradle/gradle/issues/9279 to move to versions.gradle.kts
 object Versions {
     const val kotlin = "1.3.40"
     const val mockk = "1.9.3"
@@ -20,24 +20,18 @@ plugins {
     kotlin("jvm") version "1.3.40"
     id("com.diffplug.gradle.spotless") version "3.23.1"
     id("org.jmailen.kotlinter") version "1.26.0"
-    `maven-publish`
+    application
     idea
+}
+
+application {
+    mainClassName = "com.codurance.training.tasks.TaskListKt"
 }
 
 idea {
     module {
         setDownloadJavadoc(true)
         setDownloadSources(true)
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            artifactId = "tasks"
-
-            from(components["java"])
-        }
     }
 }
 
@@ -67,19 +61,24 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Versions.junit5}")
 }
 
+tasks.withType(JavaExec::class) {
+    standardInput = System.`in`
+    standardOutput = System.out
+}
+
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
     gradleVersion = "5.6.2"
 }
 
-tasks.withType<KotlinCompile> {
+tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
         javaParameters = true
     }
 }
 
-tasks.withType<Test> {
+tasks.test {
 
     @Suppress("UnstableApiUsage")
     useJUnitPlatform {}

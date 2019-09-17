@@ -17,7 +17,7 @@ import static java.lang.System.lineSeparator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public final class ApplicationTest {
+public final class ApplicationTest  {
 
     public static final String PROMPT = "> ";
     private final PipedOutputStream inStream = new PipedOutputStream();

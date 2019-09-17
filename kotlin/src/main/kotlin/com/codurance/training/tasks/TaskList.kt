@@ -79,7 +79,7 @@ class TaskList(private val `in`: BufferedReader, private val out: PrintWriter) :
         setDone(idString, false)
     }
 
-    private fun setDone(idString: String, done: Boolean) {
+    private fun setDone(idString: String, done: Boolean ) {
         val id = Integer.parseInt(idString)
         tasks.values.flatten().find { it.id == id.toLong() }?.apply { isDone = done }
             ?: out.println("Could not find a task with an ID of $id.")
