@@ -4,10 +4,11 @@ import com.codurance.training.tasks.Task
 import java.io.PrintWriter
 
 class CheckAction(
-    private val tasks:Map<String, MutableList<Task>>,
+    private val tasks: Map<String, MutableList<Task>>,
     private val out: PrintWriter,
     private val status: Boolean
 ) : Action {
+
     override fun execute(args: String?) {
         checkNotNull(args)
         setDone(args, status)

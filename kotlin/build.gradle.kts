@@ -25,7 +25,7 @@ plugins {
 }
 
 application {
-    mainClassName = "com.codurance.training.tasks.TaskListKt"
+    mainClassName = "com.codurance.training.tasks.ApplicationKt"
 }
 
 idea {

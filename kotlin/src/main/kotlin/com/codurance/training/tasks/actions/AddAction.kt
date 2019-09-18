@@ -13,6 +13,7 @@ class AddAction(val tasks: MutableMap<String, MutableList<Task>>, private val ou
         add(args)
     }
 
+    // @fixme: with this regex we can have spaces on project names but not edit those projects afterwards
     private fun add(commandLine: String) {
         val subcommandRest = commandLine.split(" ".toRegex(), 2).toTypedArray()
         val subcommand = subcommandRest[0]
