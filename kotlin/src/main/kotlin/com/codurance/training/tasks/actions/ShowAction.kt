@@ -1,8 +1,10 @@
-package com.codurance.training.tasks
+package com.codurance.training.tasks.actions
 
+import com.codurance.training.tasks.Task
 import java.io.PrintWriter
 
-class ShowAction(val tasks: Map<String, MutableList<Task>>, private val out: PrintWriter) : Action {
+class ShowAction(val tasks: Map<String, MutableList<Task>>, private val out: PrintWriter) :
+    Action {
 
     override fun execute(args: String?) = show()
 

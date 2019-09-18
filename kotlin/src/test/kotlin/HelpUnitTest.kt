@@ -1,22 +1,17 @@
-import com.codurance.training.tasks.Action
-import com.codurance.training.tasks.HelpAction
-import com.codurance.training.tasks.TaskList
-import io.mockk.every
-import io.mockk.mockk
+import com.codurance.training.tasks.actions.HelpAction
 import io.mockk.spyk
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
-import java.io.BufferedReader
 import java.io.PrintWriter
 
 internal class HelpUnitTest {
 
     private val output = spyk(PrintWriter(System.out))
-    private val service = HelpAction(output)
+    private val action = HelpAction(output)
 
     @Test
     fun help() {
-        service.execute(null)
+        action.execute()
 
         verifyOrder {
             output.println("Commands:")

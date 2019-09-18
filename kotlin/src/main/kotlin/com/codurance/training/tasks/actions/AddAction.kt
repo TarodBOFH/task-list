@@ -1,8 +1,10 @@
-package com.codurance.training.tasks
+package com.codurance.training.tasks.actions
 
+import com.codurance.training.tasks.Task
 import java.io.PrintWriter
 
-class AddAction(val tasks: MutableMap<String, MutableList<Task>>, private val out: PrintWriter) : Action {
+class AddAction(val tasks: MutableMap<String, MutableList<Task>>, private val out: PrintWriter) :
+    Action {
 
     private var lastId: Long = 0
 

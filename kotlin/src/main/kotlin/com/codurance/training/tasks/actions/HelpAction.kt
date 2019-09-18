@@ -1,4 +1,4 @@
-package com.codurance.training.tasks
+package com.codurance.training.tasks.actions
 
 import java.io.PrintWriter
 
